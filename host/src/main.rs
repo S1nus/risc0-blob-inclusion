@@ -1,7 +1,6 @@
 use celestia_types::nmt::NamespacedHashExt;
 use celestia_types::{nmt::Namespace, Blob, Commitment, ExtendedHeader};
 use nmt_rs::row_inclusion;
-use sp1_core::{SP1Prover, SP1Stdin, SP1Verifier};
 use std::fs::File;
 use std::io::prelude::*;
 
@@ -65,13 +64,16 @@ fn main() {
     let proofs: Vec<celestia_types::nmt::NamespaceProof> =
         serde_json::from_reader(proofs_file).unwrap();
 
+    let shares = blob.to_shares().expect("Failed to split blob to shares");
+    let leaf_hashes: Vec<_> = shares.iter().map(|share| share.as_ref()).collect();
+
     /*let env = ExecutorEnv::builder()
         .write(&input)
         .unwrap()
         .build()
         .unwrap();*/
 
-    let env = ExecutorEnv::builder();
+    let mut env = ExecutorEnv::builder();
 
     env.write_slice(&dah.dah.hash().as_bytes());
     env.write(&(last_row_index as u32 - first_row_index as u32));
@@ -79,7 +81,9 @@ fn main() {
 
     println!("len leaf_hashes: {}", leaf_hashes.len());
     println!("size of leaf_hash: {}", leaf_hashes[0].len());
-    leaf_hashes.iter().for_each(|hash| env.write_slice(hash));
+    for hash in leaf_hashes.iter() {
+        env.write_slice(hash);
+    }
 
     println!("{}", last_row_index - first_row_index);
     for i in first_row_index..last_row_index {
@@ -89,14 +93,14 @@ fn main() {
         env.write(&proofs[i as usize]);
     }
 
-    env.unwrap().build().unwrap();
+    let built_env = env.build().unwrap();
 
     // Obtain the default prover.
     let prover = default_prover();
 
     // Produce a receipt by proving the specified ELF binary.
     let receipt = prover
-        .prove(env, BLOBRZ_ELF)
+        .prove(built_env, BLOBRZ_ELF)
         .unwrap();
 
     // TODO: Implement code for retrieving receipt journal here.
@@ -104,7 +108,7 @@ fn main() {
     // For example:
     // TODO: figure out how to do this
     // let _output: u32 = receipt.journal.decode().unwrap();
-    let result: bool = receipt.journal.decode().unwrap();
+    println!("{:?}", &receipt.journal);
 
     // The receipt was verified at the end of proving, but the below code is an
     // example of how someone else could verify this receipt.

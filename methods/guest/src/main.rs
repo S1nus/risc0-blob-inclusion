@@ -46,7 +46,6 @@ fn main() {
         let proof: celestia_types::nmt::NamespaceProof = env::read();
         let end = start + (proof.end_idx() as usize - proof.start_idx() as usize);
         let result = proof.verify_range(&root, &leaves[start..end], namespace.into_inner());
-        //println!("row {} result: {}", i, result.is_ok());
         start = end;
         if result.is_err() {
             env::commit(&false);
