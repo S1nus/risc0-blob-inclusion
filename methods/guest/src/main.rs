@@ -23,6 +23,7 @@ fn main() {
 
     const NUM_LEAVES: u32 = 272;
     let mut data_root = [0u8; 32 as usize];
+    let result: bool = env::read();
     env::read_slice(&mut data_root);
 
     // read num rows
@@ -40,6 +41,7 @@ fn main() {
         let root = env::read::<NamespacedHash<29>>();
         let row_inclusion_proof = env::read::<RowInclusionProof>();
         if !row_inclusion_proof.verify(data_root) {
+            println!("NOT GOOD");
             env::commit(&false);
             return;
         }
@@ -48,6 +50,7 @@ fn main() {
         let result = proof.verify_range(&root, &leaves[start..end], namespace.into_inner());
         start = end;
         if result.is_err() {
+            println!("NOT GOOD");
             env::commit(&false);
             return;
         }
@@ -56,5 +59,6 @@ fn main() {
     // TODO: do something with the input
 
     // write public output to the journal
+    println!("we good");
     env::commit(&true);
 }
