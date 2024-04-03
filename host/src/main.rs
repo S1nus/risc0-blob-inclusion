@@ -63,15 +63,8 @@ fn main() -> anyhow::Result<()> {
     let shares = blob.to_shares().expect("Failed to split blob to shares");
     let leaf_hashes: Vec<_> = shares.iter().map(|share| share.as_ref()).collect();
 
-    /*let env = ExecutorEnv::builder()
-    .write(&input)
-    ?
-    .build()
-    ?;*/
-
     let mut env = ExecutorEnv::builder();
 
-    // env.write(&false)?;
 
     env.write_slice(&dah.dah.hash().as_bytes());
     env.write(&(last_row_index as u32 - first_row_index as u32))?;
