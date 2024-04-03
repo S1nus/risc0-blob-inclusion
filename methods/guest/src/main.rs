@@ -41,7 +41,7 @@ fn main() {
         let root = env::read::<NamespacedHash<29>>();
         let row_inclusion_proof = env::read::<RowInclusionProof>();
         if !row_inclusion_proof.verify(data_root) {
-            println!("NOT GOOD");
+            env::log("NOT GOOD");
             env::commit(&false);
             return;
         }
@@ -50,7 +50,7 @@ fn main() {
         let result = proof.verify_range(&root, &leaves[start..end], namespace.into_inner());
         start = end;
         if result.is_err() {
-            println!("NOT GOOD");
+            env::log("NOT GOOD");
             env::commit(&false);
             return;
         }
@@ -59,6 +59,6 @@ fn main() {
     // TODO: do something with the input
 
     // write public output to the journal
-    println!("we good");
+    env::log("we good");
     env::commit(&true);
 }

@@ -8,7 +8,9 @@ methods = { path = "../methods" }
 risc0-zkvm = { version = "0.20.1" }
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 serde = "1.0"
-celestia-types = {path = "../../lumina/types", default-features = false}
+#celestia-types = {path = "../../lumina/types", default-features = false}
+celestia-types = {git = "https://github.com/S1nus/lumina.git", rev="c57cde48bb2d93da406c0e31a3da3ef8ab65ec33", default-features = false}
 serde_json = "1.0.114"
 bincode = "1.3.3"
-nmt-rs = {path = "../../nmt-rs", features=["serde"]}
+#nmt-rs = {path = "../../nmt-rs", features=["serde"]}
+nmt-rs = {git = "https://github.com/S1nus/nmt-rs.git", rev="e81fa89f8a7ee2b18982e8fea2784c26da93589f", features=["serde"]}

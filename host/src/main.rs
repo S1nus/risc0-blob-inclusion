@@ -75,7 +75,7 @@ fn main() {
 
     let mut env = ExecutorEnv::builder();
 
-    env.write(&false);
+    env.write(&true);
 
     env.write_slice(&dah.dah.hash().as_bytes());
     env.write(&(last_row_index as u32 - first_row_index as u32));
@@ -118,4 +118,6 @@ fn main() {
     receipt
         .verify(BLOBRZ_ID)
         .unwrap();
+
+    println!("{:?}", receipt.journal);
 }
