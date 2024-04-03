@@ -76,8 +76,9 @@ fn main() {
     let mut env = ExecutorEnv::builder();
 
     env.write_slice(&dah.dah.hash().as_bytes());
-    env.write(&(last_row_index as u32 - first_row_index as u32));
-    env.write(&my_namespace);
+    env.write_slice(&[1u8;32]);
+    env.write(&(last_row_index as u32 - first_row_index as u32)).unwrap();
+    env.write(&my_namespace).unwrap();
 
     println!("len leaf_hashes: {}", leaf_hashes.len());
     println!("size of leaf_hash: {}", leaf_hashes[0].len());
@@ -88,9 +89,9 @@ fn main() {
     println!("{}", last_row_index - first_row_index);
     for i in first_row_index..last_row_index {
         println!("i: {}", i);
-        env.write(&row_roots[i as usize]);
-        env.write(&row_inclusion_proofs[i as usize]);
-        env.write(&proofs[i as usize]);
+        env.write(&row_roots[i as usize]).unwrap();
+        env.write(&row_inclusion_proofs[i as usize]).unwrap();
+        env.write(&proofs[i as usize]).unwrap();
     }
 
     let built_env = env.build().unwrap();

@@ -22,6 +22,7 @@ fn main() {
     //let input: u32 = env::read();
 
     const NUM_LEAVES: u32 = 272;
+    let mut is_valid = false;
     let mut data_root = [0u8; 32 as usize];
     env::read_slice(&mut data_root);
 
@@ -40,8 +41,7 @@ fn main() {
         let root = env::read::<NamespacedHash<29>>();
         let row_inclusion_proof = env::read::<RowInclusionProof>();
         if !row_inclusion_proof.verify(data_root) {
-            env::log("NOT GOOD");
-            env::commit(&false);
+            is_valid = false;
             return;
         }
         let proof: celestia_types::nmt::NamespaceProof = env::read();
@@ -49,8 +49,7 @@ fn main() {
         let result = proof.verify_range(&root, &leaves[start..end], namespace.into_inner());
         start = end;
         if result.is_err() {
-            env::log("NOT GOOD");
-            env::commit(&false);
+            is_valid = false;
             return;
         }
     }
@@ -58,6 +57,6 @@ fn main() {
     // TODO: do something with the input
 
     // write public output to the journal
-    env::log("we good");
-    env::commit(&true);
+    is_valid = true;
+    //env::commit(&is_valid);
 }
