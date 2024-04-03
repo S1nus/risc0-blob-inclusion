@@ -75,8 +75,6 @@ fn main() {
 
     let mut env = ExecutorEnv::builder();
 
-    env.write(&true);
-
     env.write_slice(&dah.dah.hash().as_bytes());
     env.write(&(last_row_index as u32 - first_row_index as u32));
     env.write(&my_namespace);
@@ -110,8 +108,9 @@ fn main() {
     // For example:
     // TODO: figure out how to do this
     // let _output: u32 = receipt.journal.decode().unwrap();
-    let output: bool = receipt.journal.decode().unwrap();
-    println!("result: {}", output);
+    /*let output: bool = receipt.journal.decode().unwrap();
+    println!("result: {}", output);*/
+    println!("{:?}", receipt.journal);
 
     // The receipt was verified at the end of proving, but the below code is an
     // example of how someone else could verify this receipt.

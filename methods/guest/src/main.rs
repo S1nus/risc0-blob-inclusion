@@ -23,7 +23,6 @@ fn main() {
 
     const NUM_LEAVES: u32 = 272;
     let mut data_root = [0u8; 32 as usize];
-    let result: bool = env::read();
     env::read_slice(&mut data_root);
 
     // read num rows
