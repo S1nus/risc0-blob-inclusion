@@ -9,6 +9,6 @@ edition = "2021"
 # If you want to try (experimental) std support, add `features = [ "std" ]` to risc0-zkvm
 risc0-zkvm = { version = "0.20.1", default-features = false , features=["std"]}
 #nmt-rs = {path = "../../../nmt-rs", features=["serde"]}
-nmt-rs = {git = "https://github.com/S1nus/nmt-rs.git", branch="rz", features=["serde"]}
+nmt-rs = {git = "https://github.com/S1nus/nmt-rs.git", features=["serde"]}
 #celestia-types = {path = "../../../lumina/types", default-features = false}
 celestia-types = {git = "https://github.com/S1nus/lumina.git", branch="connor/index-field", default-features = false}
